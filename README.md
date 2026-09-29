@@ -26,10 +26,7 @@
 ## 👨‍💻 About Me
 
 - 🎓 Sinh viên **Đại học Bách Khoa TP.HCM (HCMUT)**
-- 🔭 Đang làm: các project web cá nhân và bài tập lớn
-- 🌱 Đang học: **React, Node.js, Docker**
 - 💬 Hỏi mình về: JavaScript, C/C++, Python
-- ⚡ Fun fact: code tốt nhất vào lúc 2 giờ sáng ☕
 
 ---
 
