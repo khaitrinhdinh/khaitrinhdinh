@@ -6,10 +6,12 @@ so GitHub renders it inside a README via <img>.
 Effects:
     reveal  dots pop in one by one (order set by --order), hold, then fade out
     wave    the whole picture ripples like a flag in the wind
+    fly     the picture glides across a wide banner, bobbing as it goes
 
 Usage:
     python tools/dotart.py input.png -o assets/dots.svg --cols 48 --order wave
     python tools/dotart.py flag.png -o assets/flag.svg --effect wave --grid "" --pole
+    python tools/dotart.py bird.png -o assets/bird.svg --effect fly --tint "#5a3510,#f2c46d"
 """
 import argparse
 import math
@@ -21,7 +23,7 @@ from PIL import Image, ImageDraw
 DELAY_STEPS = 48  # delays are bucketed into this many CSS classes to keep the file small
 
 
-def load_cells(path, cols, n_colors, alpha_cut, key_tol):
+def load_cells(path, cols, n_colors, alpha_cut, key_tol, tint=None):
     """Downsample the image to a cols x rows grid; return (rows, {(x, y): (r, g, b)})."""
     img = Image.open(path).convert("RGBA")
     rows = max(1, round(cols * img.height / img.width))
@@ -45,9 +47,25 @@ def load_cells(path, cols, n_colors, alpha_cut, key_tol):
                 continue
             cells[(x, y)] = (r, g, b)
 
+    if tint:
+        cells = apply_tint(cells, *tint)
     if n_colors and cells:
         cells = quantize(cells, n_colors)
     return rows, cells
+
+
+def parse_hex(h):
+    h = h.lstrip("#")
+    return tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
+
+
+def apply_tint(cells, dark, light):
+    """Recolour by brightness: black maps to `dark`, white to `light` (e.g. a bronze ramp)."""
+    out = {}
+    for k, (r, g, b) in cells.items():
+        t = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+        out[k] = tuple(round(d + (l - d) * t) for d, l in zip(dark, light))
+    return out
 
 
 def quantize(cells, n_colors):
@@ -161,13 +179,48 @@ def build_wave_svg(cells, cols, rows, cell, shape, grid_color, amp, waves, perio
         out += [mark(x + left, y, "g", cell, shape, pad) for y in range(rows) for x in range(cols)]
         out.append("</g>")
     if pole:
-        # Static pole from the top of the flag down past its bottom edge, with a knob on top.
+        # Static pole from just above the flag down past its bottom edge.
         out.append('<g fill="#c9d1d9">')
         pole_rows = range(-1, rows + pole_len)
         out += [mark(0, y, "", cell, shape, pad) for y in pole_rows]
         out.append("</g>")
     out += body
     out.append("</svg>")
+    return "\n".join(out)
+
+
+def build_fly_svg(cells, cols, rows, cell, shape, grid_color, width, duration, bob):
+    """The picture flies left-to-right across a `width`-px banner and loops.
+
+    An outer group slides horizontally; an inner group bobs, tilts and squashes
+    slightly so it reads as flapping flight rather than a sliding sticker.
+    """
+    bird_w = cols * cell
+    bob_px = bob * cell
+    pad = math.ceil(bob_px) + cell * 2
+    h = rows * cell + 2 * pad
+
+    palette, pcss = palette_css(cells)
+    css = [
+        f".fly{{animation:fly {duration:.2f}s linear infinite}}",
+        f"@keyframes fly{{from{{transform:translateX({-bird_w}px)}}to{{transform:translateX({width}px)}}}}",
+        ".bob{transform-box:fill-box;transform-origin:center;"
+        "animation:bob .9s ease-in-out infinite alternate}",
+        f"@keyframes bob{{from{{transform:translateY({-bob_px:.1f}px) rotate(-2deg) scaleY(1)}}"
+        f"to{{transform:translateY({bob_px:.1f}px) rotate(2deg) scaleY(.9)}}}}",
+    ] + pcss
+
+    out = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {h}" width="{width}" height="{h}">',
+           f"<style>{''.join(css)}</style>"]
+    if grid_color:
+        # One <pattern> instead of thousands of background dots keeps the file small.
+        r = cell * 0.42
+        out.append(f'<defs><pattern id="grid" width="{cell}" height="{cell}" patternUnits="userSpaceOnUse">'
+                   f'<circle cx="{cell / 2}" cy="{cell / 2}" r="{r:.1f}" fill="{grid_color}" fill-opacity=".12"/>'
+                   f'</pattern></defs><rect width="{width}" height="{h}" fill="url(#grid)"/>')
+    out.append('<g class="fly"><g class="bob">')
+    out += [mark(x, y, f"c{palette[rgb]}", cell, shape, pad) for (x, y), rgb in cells.items()]
+    out.append("</g></g></svg>")
     return "\n".join(out)
 
 
@@ -236,7 +289,7 @@ def main():
     p.add_argument("--cols", type=int, default=48, help="dots per row")
     p.add_argument("--cell", type=int, default=12, help="px per dot cell")
     p.add_argument("--shape", choices=["circle", "square"], default="circle")
-    p.add_argument("--effect", choices=["reveal", "wave"], default="reveal")
+    p.add_argument("--effect", choices=["reveal", "wave", "fly"], default="reveal")
     p.add_argument("--order", choices=["wave", "diagonal", "scan", "random", "ink", "bright"], default="wave")
     p.add_argument("--colors", type=int, default=12, help="palette size (0 = keep original colours)")
     p.add_argument("--grid", default="#8b949e", help="colour of the empty dot grid ('' to hide)")
@@ -248,16 +301,24 @@ def main():
     p.add_argument("--waves", type=float, default=1.2, help="wave: ripples across the flag")
     p.add_argument("--period", type=float, default=1.1, help="wave: seconds per half ripple")
     p.add_argument("--pole", action="store_true", help="wave: draw a flag pole on the left")
+    p.add_argument("--width", type=int, default=900, help="fly: banner width in px")
+    p.add_argument("--duration", type=float, default=12, help="fly: seconds to cross the banner")
+    p.add_argument("--bob", type=float, default=1.0, help="fly: bob height, in dots")
+    p.add_argument("--tint", help='recolour by brightness, "dark_hex,light_hex" (e.g. bronze)')
     p.add_argument("--alpha-cut", type=int, default=128)
     p.add_argument("--key-tol", type=float, default=40, help="distance to background colour for opaque images (0 = keep background)")
     p.add_argument("--seed", type=int, default=7)
     p.add_argument("--preview", help="also write a static PNG of the final frame")
     a = p.parse_args()
 
-    rows, cells = load_cells(a.image, a.cols, a.colors, a.alpha_cut, a.key_tol)
+    tint = tuple(parse_hex(c) for c in a.tint.split(",")) if a.tint else None
+    rows, cells = load_cells(a.image, a.cols, a.colors, a.alpha_cut, a.key_tol, tint)
     if not cells:
         raise SystemExit("No foreground pixels found - try a lower --alpha-cut or --key-tol.")
-    if a.effect == "wave":
+    if a.effect == "fly":
+        svg = build_fly_svg(cells, a.cols, rows, a.cell, a.shape, a.grid,
+                            a.width, a.duration, a.bob)
+    elif a.effect == "wave":
         svg = build_wave_svg(cells, a.cols, rows, a.cell, a.shape, a.grid,
                              a.amp, a.waves, a.period, a.pole)
     else:
