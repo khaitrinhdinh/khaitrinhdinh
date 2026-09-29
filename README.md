@@ -23,10 +23,21 @@
 
 ---
 
-## 👨‍💻 About Me
+## A little about me... 👋
 
-- 🎓 Sinh viên **Đại học Bách Khoa TP.HCM (HCMUT)**
-- 💬 Hỏi mình về: JavaScript, C/C++, Python
+I'm a **Full-Stack Developer** 👨‍💻 graduated from [**@ HCMUT**](https://hcmut.edu.vn) 🎓 majoring in Computer Science. I'm diving deep into **Agentic AI** 🤖 — building apps powered by autonomous agents that can plan, use tools, and get real work done.
+
+## ⚡ A Few Quick Facts
+
+- 🔭 I'm currently working with [**Scalably**](https://scalably.com/) 🇯🇵 (Remote), building apps with **agentic AI** at their core
+- 🧩 I enjoy working on
+  - 🤖 Agentic AI & Autonomous Agents
+  - 🕸️ Multi-Agent Systems & Workflows
+  - 🛠️ Tool Calling, MCP & Function Integration
+  - 🧠 RAG & LLM-powered Features
+  - 🌐 Full-Stack Web Development
+- 💬 Ask me about **AI Agents, JavaScript, Python**
+- 🎉 Fun fact: I build agents so they can do my job — then I find ten new jobs to do 🃏
 
 ---
 
