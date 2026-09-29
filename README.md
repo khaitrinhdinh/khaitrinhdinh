@@ -44,24 +44,21 @@
 ## 📊 GitHub Stats
 
 <p align="center">
-  <img height="170" src="https://github-readme-stats.vercel.app/api?username=khaitrinhdinh&show_icons=true&theme=tokyonight&hide_border=true&count_private=true" />
-  <img height="170" src="https://github-readme-stats.vercel.app/api/top-langs/?username=khaitrinhdinh&layout=compact&theme=tokyonight&hide_border=true" />
+  <img width="100%" src="https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=khaitrinhdinh&theme=tokyonight" />
+</p>
+
+<p align="center">
+  <img width="49%" src="https://github-profile-summary-cards.vercel.app/api/cards/stats?username=khaitrinhdinh&theme=tokyonight" />
+  <img width="49%" src="https://github-profile-summary-cards.vercel.app/api/cards/productive-time?username=khaitrinhdinh&theme=tokyonight&utcOffset=7" />
+</p>
+
+<p align="center">
+  <img width="49%" src="https://github-profile-summary-cards.vercel.app/api/cards/repos-per-language?username=khaitrinhdinh&theme=tokyonight" />
+  <img width="49%" src="https://github-profile-summary-cards.vercel.app/api/cards/most-commit-language?username=khaitrinhdinh&theme=tokyonight" />
 </p>
 
 <p align="center">
   <img src="https://streak-stats.demolab.com?user=khaitrinhdinh&theme=tokyonight&hide_border=true" />
-</p>
-
-<p align="center">
-  <img width="100%" src="https://github-readme-activity-graph.vercel.app/graph?username=khaitrinhdinh&theme=tokyo-night&hide_border=true&area=true" />
-</p>
-
----
-
-## 🏆 Trophies
-
-<p align="center">
-  <img src="https://github-profile-trophy.vercel.app/?username=khaitrinhdinh&theme=tokyonight&no-frame=true&no-bg=true&margin-w=4&row=1" />
 </p>
 
 <!-- Footer -->
