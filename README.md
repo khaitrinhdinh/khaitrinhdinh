@@ -44,11 +44,7 @@ I'm a **Full-Stack Developer** 👨‍💻 graduated from [**@ HCMUT**](https://
 ## 🛠️ Tech Stack
 
 <p align="center">
-  <img src="https://skillicons.dev/icons?i=c,cpp,python,js,ts,html,css&perline=7" />
-  <br/>
-  <img src="https://skillicons.dev/icons?i=react,nodejs,express,tailwind,mysql,mongodb&perline=7" />
-  <br/>
-  <img src="https://skillicons.dev/icons?i=git,github,docker,vscode,linux,figma&perline=7" />
+  <img src="https://skillicons.dev/icons?i=c,cpp,python,js,ts,html,css,react,nodejs,express,tailwind,mysql,mongodb,git,github,docker,vscode,linux,figma&perline=19" />
 </p>
 
 ---
