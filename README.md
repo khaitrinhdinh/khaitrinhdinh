@@ -6,7 +6,7 @@
 <!-- Typing text -->
 <p>
   <a href="https://github.com/khaitrinhdinh">
-    <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&pause=1000&color=36BCF7&center=false&vCenter=true&width=440&lines=Student+%40+HCMUT+%F0%9F%8E%93;Web+Developer+%F0%9F%92%BB;Always+learning+new+things+%F0%9F%9A%80" alt="Typing SVG" />
+    <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&pause=1000&color=36BCF7&center=false&vCenter=true&width=440&lines=Xin+ch%C3%A0o!+%F0%9F%91%8B;Developer+from+Vietnam+%F0%9F%92%BB" alt="Typing SVG" />
   </a>
 </p>
 
